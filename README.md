@@ -2,6 +2,16 @@
 
 This microservice provides functionality for car listing management, including posting advertisements, searching for vehicles, saving searches, and managing favorite listings.
 
+## Getting Started
+
+1. Ensure Java 17+, docker and kafka 3.9.1 is installed
+2. Run docker
+3. Run `docker run -p 9092:9092 apache/kafka:3.9.1`
+4. Run `mvn spring-boot:run`
+5. Access the application at `http://localhost:8081`
+6. Use the H2 console at `http://localhost:8081/h2-console` for database inspection
+
+
 ## Features Implemented
 
 ### 1. Car Listing Management
@@ -121,16 +131,5 @@ The service uses the following entities:
 
 The API expects a `User-Id` header for user identification. In a production environment, this would be replaced with proper JWT token authentication.
 
-## Getting Started
 
-1. Ensure Java 17+ is installed
-2. Run `mvn spring-boot:run`
-3. Access the application at `http://localhost:8081`
-4. Use the H2 console at `http://localhost:8081/h2-console` for database inspection
 
-## Testing
-
-The service includes comprehensive validation:
-- Input validation using Jakarta Validation annotations
-- Business logic validation (e.g., preventing duplicate favorites)
-- Proper error handling with meaningful HTTP status codes
