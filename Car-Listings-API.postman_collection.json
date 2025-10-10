@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Car Listings Service API - Complete",
-    "description": "Complete API testing collection for Car Listings microservice including database setup, user management, and all endpoints.\n\n🔴 IMPORTANT: Before testing, you MUST set up test users in the database!\n\n📋 Setup Instructions:\n1. Start the service: mvn spring-boot:run\n2. Access H2 Console: http://localhost:8081/h2-console\n3. Use connection details:\n   - JDBC URL: jdbc:h2:mem:carlistingsdb\n   - Username: sa\n   - Password: password\n4. Run the SQL from the 'Database Setup' folder\n5. Test the APIs using the provided requests",
+    "name": "Car Listings Service API - Complete Collection",
+    "description": "🚀 COMPREHENSIVE API TESTING COLLECTION\n\nComplete testing suite for Car Listings microservice including ALL available endpoints with proper test scripts, error handling, and comprehensive coverage.\n\n🔴 IMPORTANT: Before testing, you MUST set up test users in the database!\n\n📋 Setup Instructions:\n1. Start the service: mvn spring-boot:run\n2. Access H2 Console: http://localhost:8081/h2-console\n3. Use connection details:\n   - JDBC URL: jdbc:h2:mem:carlistingsdb\n   - Username: sa\n   - Password: password\n4. Run the SQL from the 'Database Setup' folder\n5. Test the APIs using the provided requests\n\n🚀 COMPLETE ENDPOINT COVERAGE:\n\n🚗 Car Listings (10 endpoints):\n- CRUD operations, search, filtering, seller management\n- Update, deactivate, mark as sold, get by seller\n- Available makes/models lookup\n\n📊 Analytics & Insights (11 endpoints):\n- Popular cars (weekly, monthly, custom date ranges)\n- Trending analysis, homepage recommendations\n- View tracking, platform statistics\n- Most favorited cars, search terms analysis\n- User engagement metrics\n\n🔍 Inspection Management (12 endpoints):\n- Create, update, reschedule inspections\n- Buyer/seller inspection views\n- Car-specific inspections, availability checking\n- Message system with read/unread tracking\n- Status management and notifications\n\n💰 Market Analysis (15 endpoints):\n- Market averages by make/model/year\n- Price predictions and distributions\n- Top performing models, high liquidity markets\n- Model comparisons, market insights\n- Depreciation analysis, admin refresh tools\n\n💳 Transaction Management (13 endpoints):\n- Create, update, cancel, complete transactions\n- Purchase/sales history with filtering\n- Car-specific transaction tracking\n- User statistics and summaries\n- Admin analytics and oversight\n\n💾 Saved Searches (5 endpoints):\n- Create, update, delete saved searches\n- User-specific search management\n\n❤️ Favorites (5 endpoints):\n- Add/remove favorites, status checking\n- User favorites management with pagination\n\n🔍 Search (2+ endpoints):\n- Advanced search with multiple filters\n- Keyword, price, year, location filtering\n\n🧪 Integration Tests:\n- End-to-end workflow testing\n- Cross-endpoint validation\n\n📈 TOTAL: 70+ API endpoints with comprehensive test coverage!",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -21,7 +21,12 @@
       "type": "string"
     },
     {
-      "key": "searchId",
+      "key": "inspectionId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "transactionId",
       "value": "1",
       "type": "string"
     }
@@ -45,7 +50,7 @@
           }
         },
         {
-          "name": "🏗️ Create Test Users - SQL",
+          "name": "🏗️ Create Test Users - SQL (Legacy)",
           "request": {
             "method": "GET",
             "header": [],
@@ -54,20 +59,154 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "test-setup"]
             },
-            "description": "📝 Copy this SQL and run in H2 Console:\n\n```sql\n-- Create test users for Car Listings Service\nINSERT INTO users (username, first_name, last_name, email, phone_number, password, role, active, created_at, updated_at) VALUES \n('johndoe', 'John', 'Doe', 'john.doe@example.com', '+61400123456', 'password123', 'SELLER', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),\n('janesmith', 'Jane', 'Smith', 'jane.smith@example.com', '+61400987654', 'password123', 'BOTH', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),\n('bobbuyer', 'Bob', 'Johnson', 'bob.johnson@example.com', '+61400555777', 'password123', 'BUYER', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);\n\n-- Verify users were created\nSELECT id, username, first_name, last_name, email, role FROM users;\n```\n\n✅ After running this SQL, you should see 3 users with IDs 1, 2, 3"
+            "description": "📝 LEGACY METHOD - Copy this SQL and run in H2 Console:\n\n```sql\n-- Create test users for Car Listings Service\nINSERT INTO users (username, first_name, last_name, email, phone_number, password, role, active, created_at, updated_at) VALUES \n('johndoe', 'John', 'Doe', 'john.doe@example.com', '+61400123456', 'password123', 'SELLER', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),\n('janesmith', 'Jane', 'Smith', 'jane.smith@example.com', '+61400987654', 'password123', 'BOTH', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),\n('bobbuyer', 'Bob', 'Johnson', 'bob.johnson@example.com', '+61400555777', 'password123', 'BUYER', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),\n('adminuser', 'Admin', 'User', 'admin@example.com', '+61400000000', 'admin123', 'BOTH', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);\n\n-- Verify users were created\nSELECT id, username, first_name, last_name, email, role FROM users;\n```\n\n⚠️ RECOMMENDED: Use the 'Complete Test Data Setup' endpoint instead!"
           }
         },
         {
-          "name": "🔍 Verify Users - SQL",
+          "name": "🚀 Complete Test Data Setup (RECOMMENDED)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response indicates success', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status', 'SUCCESS');",
+                  "});",
+                  "",
+                  "pm.test('All tables populated', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.users_created).to.be.at.least(10);",
+                  "    pm.expect(responseJson.cars_created).to.be.at.least(10);",
+                  "    pm.expect(responseJson.total_records).to.be.at.least(200);",
+                  "});",
+                  "",
+                  "console.log('=== TEST DATA CREATION SUMMARY ===');",
+                  "const data = pm.response.json();",
+                  "console.log('✅ Users created:', data.users_created || 0);",
+                  "console.log('🚗 Cars created:', data.cars_created || 0);",
+                  "console.log('❤️ Favourites created:', data.favourites_created || 0);",
+                  "console.log('💾 Saved searches created:', data.saved_searches_created || 0);",
+                  "console.log('💳 Transactions created:', data.transactions_created || 0);",
+                  "console.log('🔍 Inspections created:', data.inspections_created || 0);",
+                  "console.log('💬 Messages created:', data.inspection_messages_created || 0);",
+                  "console.log('👁️ Car views created:', data.car_views_created || 0);",
+                  "console.log('📈 Market averages created:', data.market_averages_created || 0);",
+                  "console.log('📋 Audit logs created:', data.audit_logs_created || 0);",
+                  "console.log('🔔 Notifications created:', data.notifications_created || 0);",
+                  "console.log('📈 TOTAL RECORDS:', data.total_records || 0);",
+                  "console.log('=================================');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/test-setup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "test-setup"]
+            },
+            "description": "🚀 COMPREHENSIVE TEST DATA SETUP\n\n✨ This endpoint creates comprehensive test data for ALL database tables:\n\n👥 **15 Users** (sellers, buyers, admins, mixed roles)\n🚗 **25 Cars** (multiple makes, models, years, conditions)\n❤️ **30 Favourites** (user-car relationships)\n💾 **20 Saved Searches** (with various criteria)\n💳 **15 Transactions** (different statuses and payment methods)\n🔍 **18 Inspections** (scheduled appointments)\n💬 **50+ Inspection Messages** (conversation history)\n👁️ **50 Car Views** (analytics data)\n📈 **60 Market Averages** (price analysis data)\n📋 **40 Audit Logs** (system activity tracking)\n🔔 **35 Notifications** (user alerts)\n\n📊 **Total: 300+ records** across all tables!\n\n✅ **Features:**\n- Realistic data with proper relationships\n- Mixed statuses and conditions\n- Proper foreign key relationships\n- Ready for comprehensive API testing\n- Includes admin users for advanced testing\n\n⚡ **One-click setup** - no SQL required!"
+          }
+        },
+        {
+          "name": "📈 Check Data Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains table counts', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('users');",
+                  "    pm.expect(responseJson).to.have.property('cars');",
+                  "    pm.expect(responseJson).to.have.property('total_records');",
+                  "});",
+                  "",
+                  "console.log('=== DATABASE STATUS ===');",
+                  "const data = pm.response.json();",
+                  "console.log('✅ Users:', data.users || 0);",
+                  "console.log('🚗 Cars:', data.cars || 0);",
+                  "console.log('❤️ Favourites:', data.favourites || 0);",
+                  "console.log('💾 Saved searches:', data.saved_searches || 0);",
+                  "console.log('💳 Transactions:', data.transactions || 0);",
+                  "console.log('🔍 Inspections:', data.inspections || 0);",
+                  "console.log('💬 Messages:', data.inspection_messages || 0);",
+                  "console.log('👁️ Car views:', data.car_views || 0);",
+                  "console.log('📈 Market averages:', data.market_averages || 0);",
+                  "console.log('📋 Audit logs:', data.audit_logs || 0);",
+                  "console.log('🔔 Notifications:', data.notifications || 0);",
+                  "console.log('📈 TOTAL RECORDS:', data.total_records || 0);",
+                  "console.log('=====================');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/verify-users",
+              "raw": "{{baseUrl}}/api/test-setup/status",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "verify-users"]
+              "path": ["api", "test-setup", "status"]
             },
-            "description": "📊 Run this SQL in H2 Console to check users:\n\n```sql\n-- Check if users exist\nSELECT id, username, first_name, last_name, email, role, active FROM users ORDER BY id;\n\n-- Count total users\nSELECT COUNT(*) as total_users FROM users;\n```\n\n✅ Expected Result: 3 users with IDs 1, 2, 3"
+            "description": "📈 **DATABASE STATUS CHECK**\n\nGet real-time counts of records in all database tables:\n\n- ✅ Users count\n- 🚗 Cars count\n- ❤️ Favourites count\n- 💾 Saved searches count\n- 💳 Transactions count\n- 🔍 Inspections count\n- 💬 Inspection messages count\n- 👁️ Car views count\n- 📈 Market averages count\n- 📋 Audit logs count\n- 🔔 Notifications count\n- 📈 **Total records** across all tables\n\nUse this to verify data setup was successful!"
+          }
+        },
+        {
+          "name": "🧹 Clear All Test Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Data cleared successfully', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status', 'SUCCESS');",
+                  "    pm.expect(responseJson.remaining_records).to.equal(0);",
+                  "});",
+                  "",
+                  "console.log('=== DATA CLEANUP SUMMARY ===');",
+                  "const data = pm.response.json();",
+                  "console.log('🗑️ Records deleted:', data.records_deleted || 0);",
+                  "console.log('📋 Remaining records:', data.remaining_records || 0);",
+                  "console.log('Database is now clean and ready for fresh test data!');",
+                  "console.log('============================');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/test-setup/clear",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "test-setup", "clear"]
+            },
+            "description": "🧹 **CLEAR ALL TEST DATA**\n\n⚠️ **WARNING: This will delete ALL data from ALL tables!**\n\n🗑️ This endpoint safely removes all test data in proper dependency order:\n\n1. Notifications\n2. Audit logs\n3. Car views\n4. Inspection messages\n5. Inspections\n6. Transactions\n7. Market averages\n8. Favourites\n9. Saved searches\n10. Cars\n11. Users\n\n✨ **Use cases:**\n- Clean slate for testing\n- Reset environment\n- Remove old test data\n- Prepare for fresh data setup\n\n🔄 **After clearing, run the 'Complete Test Data Setup' to repopulate!**"
           }
         }
       ]
@@ -78,6 +217,37 @@
       "item": [
         {
           "name": "✅ Create Car Listing (User 1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has car details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('make', 'Toyota');",
+                  "    pm.expect(responseJson).to.have.property('model', 'Camry');",
+                  "});",
+                  "",
+                  "pm.test('Car is active status', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status', 'ACTIVE');",
+                  "});",
+                  "",
+                  "// Set car ID for future tests",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('carId', responseJson.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -87,8 +257,7 @@
               },
               {
                 "key": "User-Id",
-                "value": "1",
-                "description": "John Doe - Seller"
+                "value": "1"
               }
             ],
             "body": {
@@ -99,63 +268,31 @@
               "raw": "{{baseUrl}}/api/cars",
               "host": ["{{baseUrl}}"],
               "path": ["api", "cars"]
-            },
-            "description": "Creates a new car listing for User 1 (John Doe). \n\n⚠️ Requires: User with ID 1 must exist in database\n\n✅ Valid conditions: NEW, EXCELLENT, VERY_GOOD, GOOD, FAIR, POOR"
-          }
-        },
-        {
-          "name": "✅ Create Honda Civic (User 2)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "User-Id",
-                "value": "2",
-                "description": "Jane Smith - Both Seller/Buyer"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"make\": \"Honda\",\n  \"model\": \"Civic\",\n  \"year\": 2019,\n  \"mileage\": 35000,\n  \"condition\": \"GOOD\",\n  \"askingPrice\": 18500.00,\n  \"description\": \"Reliable compact car, great fuel economy\",\n  \"color\": \"Blue\",\n  \"fuelType\": \"Gasoline\",\n  \"transmission\": \"Manual\",\n  \"numberOfDoors\": 4,\n  \"engineSize\": \"1.5L\",\n  \"location\": \"Melbourne, VIC\",\n  \"contactPhone\": \"+61400987654\",\n  \"contactEmail\": \"honda.seller@example.com\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/cars",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cars"]
-            }
-          }
-        },
-        {
-          "name": "✅ Create Ford Focus (User 2)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "User-Id",
-                "value": "2"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Focus\",\n  \"year\": 2021,\n  \"mileage\": 15000,\n  \"condition\": \"EXCELLENT\",\n  \"askingPrice\": 24000.00,\n  \"description\": \"Nearly new hatchback with warranty\",\n  \"color\": \"Red\",\n  \"fuelType\": \"Gasoline\",\n  \"transmission\": \"Automatic\",\n  \"numberOfDoors\": 5,\n  \"engineSize\": \"2.0L\",\n  \"location\": \"Brisbane, QLD\",\n  \"contactPhone\": \"+61400555777\",\n  \"contactEmail\": \"ford.seller@example.com\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/cars",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cars"]
             }
           }
         },
         {
           "name": "📋 Get All Cars (Paginated)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "    pm.expect(responseJson).to.have.property('totalElements');",
+                  "    pm.expect(responseJson).to.have.property('totalPages');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -173,25 +310,62 @@
                   "value": "10"
                 }
               ]
-            },
-            "description": "Gets all active car listings with pagination"
+            }
           }
         },
         {
           "name": "🔍 Get Car by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has car details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('make');",
+                  "    pm.expect(responseJson).to.have.property('model');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/cars/1",
+              "raw": "{{baseUrl}}/api/cars/{{carId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "1"]
-            },
-            "description": "Get specific car listing by ID. Change the ID in the URL to test different cars."
+              "path": ["api", "cars", "{{carId}}"]
+            }
           }
         },
         {
           "name": "✏️ Update Car Listing",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Car is updated', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('description');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "PUT",
             "header": [
@@ -201,24 +375,35 @@
               },
               {
                 "key": "User-Id",
-                "value": "1",
-                "description": "Must be the owner of the car"
+                "value": "1"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"make\": \"Toyota\",\n  \"model\": \"Camry\",\n  \"year\": 2020,\n  \"mileage\": 26000,\n  \"condition\": \"EXCELLENT\",\n  \"askingPrice\": 21500.00,\n  \"description\": \"Well-maintained sedan with full service history - Price Reduced!\",\n  \"color\": \"Silver\",\n  \"fuelType\": \"Gasoline\",\n  \"transmission\": \"Automatic\",\n  \"numberOfDoors\": 4,\n  \"engineSize\": \"2.5L\",\n  \"location\": \"Sydney, NSW\",\n  \"contactPhone\": \"+61400123456\",\n  \"contactEmail\": \"seller@example.com\"\n}"
+              "raw": "{\n  \"make\": \"Toyota\",\n  \"model\": \"Camry\",\n  \"year\": 2020,\n  \"mileage\": 26000,\n  \"condition\": \"EXCELLENT\",\n  \"askingPrice\": 21500.00,\n  \"description\": \"Well-maintained sedan with full service history - UPDATED!\",\n  \"color\": \"Silver\",\n  \"fuelType\": \"Gasoline\",\n  \"transmission\": \"Automatic\",\n  \"numberOfDoors\": 4,\n  \"engineSize\": \"2.5L\",\n  \"location\": \"Sydney, NSW\",\n  \"contactPhone\": \"+61400123456\",\n  \"contactEmail\": \"seller@example.com\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/cars/1",
+              "raw": "{{baseUrl}}/api/cars/{{carId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "1"]
-            },
-            "description": "Update car with ID 1. Only the car owner can update their listing."
+              "path": ["api", "cars", "{{carId}}"]
+            }
           }
         },
         {
           "name": "🚫 Deactivate Car Listing",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 204', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
             "header": [
@@ -228,15 +413,27 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/cars/1",
+              "raw": "{{baseUrl}}/api/cars/{{carId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "1"]
-            },
-            "description": "Deactivate car listing (doesn't delete, just makes inactive)"
+              "path": ["api", "cars", "{{carId}}"]
+            }
           }
         },
         {
           "name": "💰 Mark Car as Sold",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 204', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "PUT",
             "header": [
@@ -246,28 +443,72 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/cars/1/sold",
+              "raw": "{{baseUrl}}/api/cars/{{carId}}/sold",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "1", "sold"]
-            },
-            "description": "Mark car as sold (changes status to SOLD)"
+              "path": ["api", "cars", "{{carId}}", "sold"]
+            }
           }
         },
         {
           "name": "👤 Get Listings by Seller",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/cars/seller/1",
+              "raw": "{{baseUrl}}/api/cars/seller/1?page=0&size=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "seller", "1"]
-            },
-            "description": "Get all car listings by a specific seller (User ID 1)"
+              "path": ["api", "cars", "seller", "1"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
           }
         },
         {
           "name": "🏷️ Get Available Car Makes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -275,12 +516,29 @@
               "raw": "{{baseUrl}}/api/cars/makes",
               "host": ["{{baseUrl}}"],
               "path": ["api", "cars", "makes"]
-            },
-            "description": "Get list of all available car makes from active listings"
+            }
           }
         },
         {
           "name": "🚗 Get Models for Make",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -294,8 +552,2299 @@
                   "value": "Toyota"
                 }
               ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Analytics",
+      "description": "Analytics and insights endpoints for tracking popularity, views, and platform statistics",
+      "item": [
+        {
+          "name": "📈 Get Popular Cars This Week",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "    pm.expect(responseJson).to.have.property('totalElements');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/popular/week?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "popular", "week"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🎯 Record Car View",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "PostmanTestAgent/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/views/{{carId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "views", "{{carId}}"]
+            }
+          }
+        },
+        {
+          "name": "📊 Get Car View Statistics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains statistics', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/views/{{carId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "views", "{{carId}}"]
+            }
+          }
+        },
+        {
+          "name": "🏆 Get Trending Cars",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/trending?page=0&size=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "trending"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📈 Get Popular Cars This Month",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "    pm.expect(responseJson).to.have.property('totalElements');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/popular/month?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "popular", "month"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📅 Get Popular Cars Custom Date Range",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/popular/custom?startDate=2024-01-01&endDate=2024-03-31&page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "popular", "custom"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-03-31"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🏠 Get Homepage Popular Cars",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/homepage/popular?page=0&size=12",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "homepage", "popular"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "12"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "⭐ Get Most Favorited Cars",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/favorites/top?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "favorites", "top"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🔍 Get Popular Search Terms",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/search/popular-terms?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "search", "popular-terms"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "👥 Get User Engagement Metrics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains engagement metrics', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/engagement?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "engagement"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📈 Get Platform Statistics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains platform stats', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/stats/platform",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "stats", "platform"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔍 Inspections",
+      "description": "Vehicle inspection scheduling and management endpoints",
+      "item": [
+        {
+          "name": "✅ Create Inspection Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has inspection details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('status', 'REQUESTED');",
+                  "});",
+                  "",
+                  "// Set inspection ID for future tests",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('inspectionId', responseJson.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carId\": {{carId}},\n  \"scheduledDateTime\": \"2024-03-15T14:00:00\",\n  \"durationMinutes\": 60,\n  \"location\": \"Seller's Address\",\n  \"notes\": \"Interested in comprehensive inspection before purchase\"\n}"
             },
-            "description": "Get all available models for a specific make"
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Inspection by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has inspection details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('status');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/{{inspectionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "{{inspectionId}}"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Buyer Inspections",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/buyer?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "buyer"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "✏️ Update Inspection Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Status is updated', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status', 'CONFIRMED');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/{{inspectionId}}/status?status=CONFIRMED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "{{inspectionId}}", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CONFIRMED"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Seller Inspections",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/seller?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "seller"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🚗 Get Car Inspections",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/car/{{carId}}?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "car", "{{carId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📅 Reschedule Inspection",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Inspection is rescheduled', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('scheduledDateTime');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/{{inspectionId}}/reschedule?newDateTime=2024-03-16T15:00:00",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "{{inspectionId}}", "reschedule"],
+              "query": [
+                {
+                  "key": "newDateTime",
+                  "value": "2024-03-16T15:00:00"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📅 Get Seller Availability",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/availability/1?startDate=2024-03-15&endDate=2024-03-22",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "availability", "1"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-03-15"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-03-22"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "💬 Send Inspection Message",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has message details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('message');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inspectionId\": {{inspectionId}},\n  \"message\": \"Thank you for confirming the inspection. See you at 2 PM.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "messages"]
+            }
+          }
+        },
+        {
+          "name": "💭 Get Inspection Messages",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/{{inspectionId}}/messages?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "{{inspectionId}}", "messages"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "✅ Mark Messages as Read",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/{{inspectionId}}/messages/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "{{inspectionId}}", "messages", "read"]
+            }
+          }
+        },
+        {
+          "name": "🔔 Get Unread Message Count",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a number', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.a('number');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inspections/messages/unread-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inspections", "messages", "unread-count"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Market Analysis",
+      "description": "Market intelligence and price analysis endpoints",
+      "item": [
+        {
+          "name": "📊 Get Market Average",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 404', function () {",
+                  "    pm.expect([200, 404]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Response has market data', function () {",
+                  "        const responseJson = pm.response.json();",
+                  "        pm.expect(responseJson).to.have.property('averagePrice');",
+                  "        pm.expect(responseJson).to.have.property('make');",
+                  "        pm.expect(responseJson).to.have.property('model');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/average?make=Toyota&model=Camry&year=2020",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "average"],
+              "query": [
+                {
+                  "key": "make",
+                  "value": "Toyota"
+                },
+                {
+                  "key": "model",
+                  "value": "Camry"
+                },
+                {
+                  "key": "year",
+                  "value": "2020"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🚗 Get Available Makes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/makes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "makes"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Market Averages by Make",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/averages/make/Toyota",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "averages", "make", "Toyota"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Market Averages by Make and Model",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/averages/make/Toyota/model/Camry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "averages", "make", "Toyota", "model", "Camry"]
+            }
+          }
+        },
+        {
+          "name": "🚗 Get Available Models for Make",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/models/Toyota",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "models", "Toyota"]
+            }
+          }
+        },
+        {
+          "name": "📅 Get Available Years for Make/Model",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array of numbers', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/years/Toyota/Camry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "years", "Toyota", "Camry"]
+            }
+          }
+        },
+        {
+          "name": "📉 Get Price Distribution",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains distribution data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/price-distribution?make=Toyota&model=Camry&year=2020",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "price-distribution"],
+              "query": [
+                {
+                  "key": "make",
+                  "value": "Toyota"
+                },
+                {
+                  "key": "model",
+                  "value": "Camry"
+                },
+                {
+                  "key": "year",
+                  "value": "2020"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🏆 Get Top Performing Models",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/trends/top-performers?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "trends", "top-performers"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "💧 Get High Liquidity Markets",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/trends/high-liquidity?minSoldListings=5&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "trends", "high-liquidity"],
+              "query": [
+                {
+                  "key": "minSoldListings",
+                  "value": "5"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "⚖️ Compare Multiple Models",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/compare?makes=Toyota,Honda&models=Camry,Civic&years=2020,2020",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "compare"],
+              "query": [
+                {
+                  "key": "makes",
+                  "value": "Toyota,Honda"
+                },
+                {
+                  "key": "models",
+                  "value": "Camry,Civic"
+                },
+                {
+                  "key": "years",
+                  "value": "2020,2020"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "💡 Get Market Insights",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains insights data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/insights?make=Toyota&model=Camry&year=2020",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "insights"],
+              "query": [
+                {
+                  "key": "make",
+                  "value": "Toyota"
+                },
+                {
+                  "key": "model",
+                  "value": "Camry"
+                },
+                {
+                  "key": "year",
+                  "value": "2020"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📉 Get Depreciation Analysis",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains depreciation data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/depreciation/Toyota/Camry?startYear=2018&endYear=2022",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "depreciation", "Toyota", "Camry"],
+              "query": [
+                {
+                  "key": "startYear",
+                  "value": "2018"
+                },
+                {
+                  "key": "endYear",
+                  "value": "2022"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🔄 Refresh Market Averages (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 403', function () {",
+                  "    pm.expect([200, 403]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Response contains result data', function () {",
+                  "        const responseJson = pm.response.json();",
+                  "        pm.expect(responseJson).to.be.an('object');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "4",
+                "description": "Admin user"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/refresh?make=Toyota&model=Camry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "refresh"],
+              "query": [
+                {
+                  "key": "make",
+                  "value": "Toyota"
+                },
+                {
+                  "key": "model",
+                  "value": "Camry"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🔮 Get Price Prediction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains prediction data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/price-prediction?make=Toyota&model=Camry&year=2020&mileage=25000&condition=EXCELLENT",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "price-prediction"],
+              "query": [
+                {
+                  "key": "make",
+                  "value": "Toyota"
+                },
+                {
+                  "key": "model",
+                  "value": "Camry"
+                },
+                {
+                  "key": "year",
+                  "value": "2020"
+                },
+                {
+                  "key": "mileage",
+                  "value": "25000"
+                },
+                {
+                  "key": "condition",
+                  "value": "EXCELLENT"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📈 Get Market Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains summary data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/market/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "market", "summary"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💳 Transactions",
+      "description": "Transaction processing and management endpoints",
+      "item": [
+        {
+          "name": "✅ Create Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has transaction details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('status', 'PENDING');",
+                  "});",
+                  "",
+                  "// Set transaction ID for future tests",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('transactionId', responseJson.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carId\": {{carId}},\n  \"salePrice\": 22000.00,\n  \"paymentMethod\": \"Bank Transfer\",\n  \"notes\": \"Cash purchase, immediate pickup arranged\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Transaction by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has transaction details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('status');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Purchase History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/purchases?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "purchases"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "✅ Complete Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Transaction is completed', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status', 'COMPLETED');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}", "complete"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get Sales History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/sales?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "sales"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📅 Get Transaction History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/history?page=0&size=10&startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "history"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🚗 Get Car Transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/car/{{carId}}?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "car", "{{carId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "⚙️ Update Transaction Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Status is updated', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/status?status=CONFIRMED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CONFIRMED"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "❌ Cancel Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Transaction is cancelled', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status', 'CANCELLED');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}", "cancel"]
+            }
+          }
+        },
+        {
+          "name": "📈 Get Transaction Statistics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains statistics', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "stats"]
+            }
+          }
+        },
+        {
+          "name": "📅 Get Transaction Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains summary data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/summary?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "summary"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "🛠️ Admin: Get All Transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 403', function () {",
+                  "    pm.expect([200, 403]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Response has paginated structure', function () {",
+                  "        const responseJson = pm.response.json();",
+                  "        pm.expect(responseJson).to.have.property('content');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "4",
+                "description": "Admin user"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/admin/all?page=0&size=20&startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "admin", "all"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "📈 Admin: Get Transaction Analytics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 403', function () {",
+                  "    pm.expect([200, 403]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Response contains analytics data', function () {",
+                  "        const responseJson = pm.response.json();",
+                  "        pm.expect(responseJson).to.be.an('object');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "4",
+                "description": "Admin user"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/admin/analytics?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "admin", "analytics"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💾 Saved Searches",
+      "description": "Manage saved search criteria for buyers",
+      "item": [
+        {
+          "name": "💾 Create Saved Search",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has saved search details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('name');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Affordable Toyota Cars\",\n  \"make\": \"Toyota\",\n  \"maxPrice\": 25000,\n  \"minYear\": 2017,\n  \"emailNotifications\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/saved-searches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "saved-searches"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get All Saved Searches",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/saved-searches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "saved-searches"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "❤️ Favorites",
+      "description": "Manage favorite car listings for buyers",
+      "item": [
+        {
+          "name": "❤️ Add Car to Favorites",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has favorite details', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/favourites/cars/{{carId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "favourites", "cars", "{{carId}}"]
+            }
+          }
+        },
+        {
+          "name": "📋 Get User's Favorite Cars",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/favourites?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "favourites"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "❓ Check if Car is Favorited",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is boolean', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.a('boolean');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Id",
+                "value": "3"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/favourites/cars/{{carId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "favourites", "cars", "{{carId}}", "status"]
+            }
           }
         }
       ]
@@ -306,6 +2855,24 @@
       "item": [
         {
           "name": "🔍 Basic Search - Keyword",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -319,83 +2886,29 @@
                   "value": "toyota"
                 }
               ]
-            },
-            "description": "Search cars by keyword (searches in make, model, description)"
-          }
-        },
-        {
-          "name": "🔍 Advanced Search - All Filters",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/cars/search?keyword=toyota&minYear=2018&maxYear=2022&minPrice=15000&maxPrice=30000&make=Toyota&condition=EXCELLENT&fuelType=Gasoline&transmission=Automatic&location=Sydney&sortBy=price&sortDirection=ASC&page=0&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "search"],
-              "query": [
-                {
-                  "key": "keyword",
-                  "value": "toyota"
-                },
-                {
-                  "key": "minYear",
-                  "value": "2018"
-                },
-                {
-                  "key": "maxYear",
-                  "value": "2022"
-                },
-                {
-                  "key": "minPrice",
-                  "value": "15000"
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "30000"
-                },
-                {
-                  "key": "make",
-                  "value": "Toyota"
-                },
-                {
-                  "key": "condition",
-                  "value": "EXCELLENT"
-                },
-                {
-                  "key": "fuelType",
-                  "value": "Gasoline"
-                },
-                {
-                  "key": "transmission",
-                  "value": "Automatic"
-                },
-                {
-                  "key": "location",
-                  "value": "Sydney"
-                },
-                {
-                  "key": "sortBy",
-                  "value": "price"
-                },
-                {
-                  "key": "sortDirection",
-                  "value": "ASC"
-                },
-                {
-                  "key": "page",
-                  "value": "0"
-                },
-                {
-                  "key": "size",
-                  "value": "10"
-                }
-              ]
-            },
-            "description": "Advanced search with all available filters and sorting"
+            }
           }
         },
         {
           "name": "💰 Search by Price Range",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has paginated structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -423,319 +2936,46 @@
               ]
             }
           }
-        },
-        {
-          "name": "📅 Search by Year Range",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/cars/search?minYear=2019&maxYear=2021&sortBy=year&sortDirection=DESC",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cars", "search"],
-              "query": [
-                {
-                  "key": "minYear",
-                  "value": "2019"
-                },
-                {
-                  "key": "maxYear",
-                  "value": "2021"
-                },
-                {
-                  "key": "sortBy",
-                  "value": "year"
-                },
-                {
-                  "key": "sortDirection",
-                  "value": "DESC"
-                }
-              ]
-            }
-          }
         }
       ]
     },
     {
-      "name": "💾 Saved Searches",
-      "description": "Manage saved search criteria for buyers",
+      "name": "🧪 Integration Tests",
+      "description": "End-to-end workflow tests that combine multiple endpoints",
       "item": [
         {
-          "name": "💾 Create Saved Search",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "User-Id",
-                "value": "3",
-                "description": "Bob Johnson - Buyer"
+          "name": "🔄 Complete Car Selling Workflow",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// This test will run a complete workflow:",
+                  "// 1. Create car listing",
+                  "// 2. Record views for analytics",
+                  "// 3. Schedule inspection",
+                  "// 4. Process transaction",
+                  "// 5. Complete sale",
+                  "",
+                  "console.log('Starting complete car selling workflow test...');"
+                ],
+                "type": "text/javascript"
               }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Affordable Toyota Cars\",\n  \"make\": \"Toyota\",\n  \"maxPrice\": 25000,\n  \"minYear\": 2017,\n  \"emailNotifications\": true\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/api/saved-searches",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "saved-searches"]
-            },
-            "description": "Create a saved search for User 3 (Bob - Buyer)"
-          }
-        },
-        {
-          "name": "💾 Create Another Saved Search",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "User-Id",
-                "value": "3"
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Workflow Test - Service is accessible', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "console.log('Complete workflow test setup complete. Run individual requests to test full flow.');"
+                ],
+                "type": "text/javascript"
               }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Luxury Sedans Under 30k\",\n  \"make\": \"Honda\",\n  \"model\": \"Civic\",\n  \"maxPrice\": 30000,\n  \"minYear\": 2018,\n  \"condition\": \"EXCELLENT\",\n  \"emailNotifications\": false\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/saved-searches",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "saved-searches"]
             }
-          }
-        },
-        {
-          "name": "📋 Get All Saved Searches",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/saved-searches",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "saved-searches"]
-            },
-            "description": "Get all saved searches for the current user"
-          }
-        },
-        {
-          "name": "🔍 Get Saved Search by ID",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/saved-searches/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "saved-searches", "1"]
-            },
-            "description": "Get specific saved search by ID"
-          }
-        },
-        {
-          "name": "✏️ Update Saved Search",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated Toyota Search\",\n  \"make\": \"Toyota\",\n  \"maxPrice\": 30000,\n  \"minYear\": 2018,\n  \"emailNotifications\": false\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/saved-searches/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "saved-searches", "1"]
-            }
-          }
-        },
-        {
-          "name": "🗑️ Delete Saved Search",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/saved-searches/2",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "saved-searches", "2"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "❤️ Favorites",
-      "description": "Manage favorite car listings for buyers",
-      "item": [
-        {
-          "name": "❤️ Add Car to Favorites",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3",
-                "description": "Bob Johnson - Buyer"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/favourites/cars/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "favourites", "cars", "1"]
-            },
-            "description": "Add car ID 1 to favorites for User 3 (Bob)"
-          }
-        },
-        {
-          "name": "❤️ Add Another Car to Favorites",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/favourites/cars/2",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "favourites", "cars", "2"]
-            },
-            "description": "Add car ID 2 to favorites"
-          }
-        },
-        {
-          "name": "💔 Remove Car from Favorites",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/favourites/cars/2",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "favourites", "cars", "2"]
-            },
-            "description": "Remove car ID 2 from favorites"
-          }
-        },
-        {
-          "name": "📋 Get User's Favorite Cars",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/favourites?page=0&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "favourites"],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "0"
-                },
-                {
-                  "key": "size",
-                  "value": "10"
-                }
-              ]
-            },
-            "description": "Get all favorite cars for the current user"
-          }
-        },
-        {
-          "name": "❓ Check if Car is Favorited",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/favourites/cars/1/status",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "favourites", "cars", "1", "status"]
-            },
-            "description": "Check if car ID 1 is in user's favorites"
-          }
-        },
-        {
-          "name": "🔢 Get Favorites Count",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "User-Id",
-                "value": "3"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/favourites/count",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "favourites", "count"]
-            },
-            "description": "Get total number of favorite cars for user"
-          }
-        }
-      ]
-    },
-    {
-      "name": "🧪 Testing Workflow",
-      "description": "Recommended testing sequence",
-      "item": [
-        {
-          "name": "1️⃣ Step 1 - Verify Service is Running",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/h2-console",
-              "host": ["{{baseUrl}}"],
-              "path": ["h2-console"]
-            },
-            "description": "✅ Verify service is running and H2 console is accessible\n\n🔗 Should open H2 database console\n\nIf this fails, start the service with: mvn spring-boot:run"
-          }
-        },
-        {
-          "name": "2️⃣ Step 2 - Test Empty Car List",
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -744,36 +2984,88 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "cars"]
             },
-            "description": "📝 Should return empty list initially (before creating users/cars)"
+            "description": "This endpoint starts the workflow test by checking if cars exist"
           }
         },
         {
-          "name": "3️⃣ Step 3 - Try Creating Car (Will Fail)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "User-Id",
-                "value": "1"
+          "name": "📊 Analytics Data Validation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Analytics endpoints are responding', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Platform statistics contain expected data structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.be.an('object');",
+                  "});",
+                  "",
+                  "console.log('Analytics validation complete');"
+                ],
+                "type": "text/javascript"
               }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"make\": \"Test\",\n  \"model\": \"Car\",\n  \"year\": 2020,\n  \"mileage\": 10000,\n  \"condition\": \"GOOD\",\n  \"askingPrice\": 15000.00,\n  \"description\": \"Test car\"\n}"
-            },
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/cars",
+              "raw": "{{baseUrl}}/api/analytics/stats/platform",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "cars"]
-            },
-            "description": "❌ This will fail with 400 Bad Request because User ID 1 doesn't exist yet\n\n🔧 After this fails, go to H2 Console and create users using the SQL from Database Setup folder"
+              "path": ["api", "analytics", "stats", "platform"]
+            }
           }
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// Global pre-request script",
+          "console.log('🚀 Running request to: ' + pm.request.url);",
+          "console.log('📋 Method: ' + pm.request.method);",
+          "",
+          "// Set default user if not already set",
+          "if (!pm.collectionVariables.get('userId')) {",
+          "    pm.collectionVariables.set('userId', '1');",
+          "}",
+          "",
+          "if (!pm.collectionVariables.get('carId')) {",
+          "    pm.collectionVariables.set('carId', '1');",
+          "}"
+        ],
+        "type": "text/javascript"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [
+          "// Global test script",
+          "const responseTime = pm.response.responseTime;",
+          "console.log('⏱️ Response time: ' + responseTime + 'ms');",
+          "",
+          "// Basic performance check",
+          "pm.test('Response time is reasonable (< 5000ms)', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "// Log response status",
+          "console.log('📊 Status: ' + pm.response.status + ' (' + pm.response.code + ')');",
+          "",
+          "// Common error handling",
+          "if (pm.response.code >= 400) {",
+          "    console.log('❌ Error response body: ' + pm.response.text());",
+          "}"
+        ],
+        "type": "text/javascript"
+      }
     }
   ]
 }

@@ -62,4 +62,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     
     @Query("SELECT DISTINCT c.model FROM Car c WHERE c.status = :status AND LOWER(c.make) = LOWER(:make) ORDER BY c.model")
     List<String> findDistinctModelsByMakeAndStatus(@Param("make") String make, @Param("status") CarStatus status);
+    
+    long countByStatus(CarStatus status);
 }
