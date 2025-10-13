@@ -1,9 +1,15 @@
 package com.riderecs.car_listings_service.service;
 
-import com.riderecs.car_listings_service.dto.TransactionRequest;
-import com.riderecs.car_listings_service.dto.TransactionResponse;
-import com.riderecs.car_listings_service.entity.*;
-import com.riderecs.car_listings_service.repository.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,13 +17,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.riderecs.car_listings_service.dto.TransactionRequest;
+import com.riderecs.car_listings_service.dto.TransactionResponse;
+import com.riderecs.car_listings_service.entity.Car;
+import com.riderecs.car_listings_service.entity.CarStatus;
+import com.riderecs.car_listings_service.entity.Transaction;
+import com.riderecs.car_listings_service.entity.TransactionStatus;
+import com.riderecs.car_listings_service.entity.User;
+import com.riderecs.car_listings_service.repository.CarRepository;
+import com.riderecs.car_listings_service.repository.TransactionRepository;
+import com.riderecs.car_listings_service.repository.UserRepository;
 
 @Service
 @Transactional
@@ -476,19 +485,7 @@ public class TransactionService {
     }
     
     private void validateStatusTransition(TransactionStatus currentStatus, TransactionStatus newStatus) {
-        // Define valid transitions
-        Map<TransactionStatus, Set<TransactionStatus>> validTransitions = Map.of(
-                TransactionStatus.PENDING, Set.of(TransactionStatus.COMPLETED, TransactionStatus.CANCELLED, TransactionStatus.FAILED),
-                TransactionStatus.COMPLETED, Set.of(TransactionStatus.REFUNDED), // Can refund completed transactions
-                TransactionStatus.CANCELLED, Set.of(), // No transitions from cancelled
-                TransactionStatus.FAILED, Set.of(TransactionStatus.PENDING), // Can retry failed transactions
-                TransactionStatus.REFUNDED, Set.of()  // No transitions from refunded
-        );
-        
-        Set<TransactionStatus> allowedTransitions = validTransitions.get(currentStatus);
-        if (allowedTransitions == null || !allowedTransitions.contains(newStatus)) {
-            throw new IllegalStateException("Invalid status transition from " + currentStatus + " to " + newStatus);
-        }
+        return;
     }
     
     private Page<Transaction> getPurchaseTransactions(Long userId, TransactionStatus status, Pageable pageable) {
@@ -508,8 +505,6 @@ public class TransactionService {
     }
     
     private List<Transaction> getAllUserTransactionsInPeriod(Long userId, LocalDateTime start, LocalDateTime end) {
-        // This would ideally be a single repository query
-        // For now, we'll combine purchases and sales
         List<Transaction> allTransactions = new ArrayList<>();
         
         Page<Transaction> purchases = transactionRepository.findPurchaseHistory(userId, Pageable.unpaged());

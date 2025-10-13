@@ -1,14 +1,54 @@
 package com.riderecs.car_listings_service.controller;
 
-import com.riderecs.car_listings_service.entity.*;
-import com.riderecs.car_listings_service.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.riderecs.car_listings_service.entity.AuditAction;
+import com.riderecs.car_listings_service.entity.AuditLog;
+import com.riderecs.car_listings_service.entity.Car;
+import com.riderecs.car_listings_service.entity.CarCondition;
+import com.riderecs.car_listings_service.entity.CarStatus;
+import com.riderecs.car_listings_service.entity.CarView;
+import com.riderecs.car_listings_service.entity.Favourite;
+import com.riderecs.car_listings_service.entity.Inspection;
+import com.riderecs.car_listings_service.entity.InspectionMessage;
+import com.riderecs.car_listings_service.entity.InspectionStatus;
+import com.riderecs.car_listings_service.entity.MarketAverage;
+import com.riderecs.car_listings_service.entity.Notification;
+import com.riderecs.car_listings_service.entity.NotificationType;
+import com.riderecs.car_listings_service.entity.SavedSearch;
+import com.riderecs.car_listings_service.entity.Transaction;
+import com.riderecs.car_listings_service.entity.TransactionStatus;
+import com.riderecs.car_listings_service.entity.User;
+import com.riderecs.car_listings_service.entity.UserRole;
+import com.riderecs.car_listings_service.repository.AuditLogRepository;
+import com.riderecs.car_listings_service.repository.CarRepository;
+import com.riderecs.car_listings_service.repository.CarViewRepository;
+import com.riderecs.car_listings_service.repository.FavouriteRepository;
+import com.riderecs.car_listings_service.repository.InspectionMessageRepository;
+import com.riderecs.car_listings_service.repository.InspectionRepository;
+import com.riderecs.car_listings_service.repository.MarketAverageRepository;
+import com.riderecs.car_listings_service.repository.NotificationRepository;
+import com.riderecs.car_listings_service.repository.SavedSearchRepository;
+import com.riderecs.car_listings_service.repository.TransactionRepository;
+import com.riderecs.car_listings_service.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -158,7 +198,7 @@ public class TestSetupController {
         users.add(createUser("superadmin", "superadmin@example.com", "Super", "Admin", "+61400000001", UserRole.BOTH));
         
         // Sellers
-        users.add(createUser("john_seller", "john@example.com", "John", "Doe", "+61400123456", UserRole.SELLER));
+        users.add(createUser("john_seller", "john@example.com", "John", "Doe", "+61400123456", UserRole.BOTH));
         users.add(createUser("jane_seller", "jane@example.com", "Jane", "Smith", "+61400987654", UserRole.BOTH));
         users.add(createUser("mike_seller", "mike@example.com", "Mike", "Johnson", "+61400555777", UserRole.SELLER));
         users.add(createUser("sarah_seller", "sarah@example.com", "Sarah", "Williams", "+61400111222", UserRole.BOTH));
